@@ -1,5 +1,8 @@
 # Tomato-Leaf-Disease-Prediction
 
+Model Developed by Nuhan Gunasekara 
+Application Developed by Hathik Ihthizam
+
 ## 🍅 ToMate - Deep Learning Tomato Leaf Disease Prediction Model
 
 This project uses deep learning to detect and classify **tomato leaf diseases** from images using a Convolutional Neural Network (CNN). The trained model can later be integrated into the **ToMate - Application** for real-time disease diagnosis.
