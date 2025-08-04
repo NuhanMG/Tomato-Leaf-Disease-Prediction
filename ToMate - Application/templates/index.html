@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tomato Leaf Disease Prediction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='images/smart.gif') }}" width="320" height="320" alt="Logo">
+        </div>
+        
+        <!-- Right Center Content -->
+        <div class="right-center">
+            <h1>Tomato Leaf Disease Prediction</h1>
+            
+            <!-- Form with File Upload and Scan Button in One Line -->
+            <div class="file-scan-container">
+                <form id="upload-form" enctype="multipart/form-data">
+                    <input type="file" id="file-upload" name="file" accept="image/*" required>
+                    <button type="submit" class="upload-button">Predict Disease</button>
+                </form>
+
+                <button id="scan-button" class="upload-button">Scan Tomato Leaf</button>
+            </div>
+
+            <!-- Camera Section for Scanning -->
+            <div id="scan-container" style="display:none;">
+                <h3>Scan Tomato Leaf with Camera</h3>
+                <video id="camera-feed" width="320" height="240" autoplay></video>
+                <canvas id="canvas" style="display:none;"></canvas>
+                <button id="capture-button" class="upload-button">Capture Image</button>
+            </div>
+
+            <div id="prediction-result"></div>
+        </div>
+    </div>
+
+    <footer>
+        <p><b>Tomato Sense <br> © Developed by Hathik & Nuhan for CW2 in DL <br> HNDDS 24.1F @ NIBM</b></p>
+    </footer>
+
+    <script>
+        const form = document.getElementById('upload-form');
+        const fileInput = document.getElementById('file-upload');
+        const resultDiv = document.getElementById('prediction-result');
+
+        const scanButton = document.getElementById('scan-button');
+        const scanContainer = document.getElementById('scan-container');
+        const captureButton = document.getElementById('capture-button');
+        const cameraFeed = document.getElementById('camera-feed');
+        const canvas = document.getElementById('canvas');
+
+        // Handle File Upload Form
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+
+            try {
+                const response = await fetch('http://127.0.0.1:5000/predict', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                console.log("Response Data:", data);  // Log the response data for debugging
+                
+                if (data.prediction) {
+                    resultDiv.innerHTML = `<h3>Prediction: ${data.prediction}</h3>`;
+                } else {
+                    resultDiv.innerHTML = `<h3>Error: ${data.error}</h3>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<h3>Error: ${error.message}</h3>`;
+                console.error("Error during prediction:", error);  // Log the error to console
+            }
+        });
+
+        // Handle Camera Scanning
+        scanButton.addEventListener('click', () => {
+            scanContainer.style.display = 'block';
+            scanButton.style.display = 'none';
+            startCamera();
+        });
+
+        captureButton.addEventListener('click', () => {
+            captureImage();
+        });
+
+        // Start the camera feed
+        async function startCamera() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                cameraFeed.srcObject = stream;
+            } catch (error) {
+                console.error("Error accessing camera:", error);
+                alert("Unable to access the camera. Please ensure you have granted permission.");
+            }
+        }
+
+        // Capture the image from camera feed
+        function captureImage() {
+            // Set canvas dimensions to match the video feed
+            canvas.width = cameraFeed.videoWidth;
+            canvas.height = cameraFeed.videoHeight;
+
+            const context = canvas.getContext('2d');
+            context.drawImage(cameraFeed, 0, 0, canvas.width, canvas.height);
+
+            // Log the captured image to verify
+            const imageData = canvas.toDataURL('image/png');
+            console.log("Captured Image Data:", imageData);
+
+            // Convert the image to a file
+            const file = dataURLtoFile(imageData, 'scanned_image.png');
+            console.log("File created:", file);
+
+            // Send the image to the server for prediction
+            const formData = new FormData();
+            formData.append('file', file);
+
+            fetch('http://127.0.0.1:5000/predict', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.prediction) {
+                    resultDiv.innerHTML = `<h3>Prediction: ${data.prediction}</h3>`;
+                } else {
+                    resultDiv.innerHTML = `<h3>Error: ${data.error}</h3>`;
+                }
+            })
+            .catch(error => {
+                resultDiv.innerHTML = `<h3>Error: ${error.message}</h3>`;
+                console.error("Error during prediction:", error);
+            });
+        }
+
+        // Convert data URL to file
+        function dataURLtoFile(dataurl, filename) {
+            const arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+            bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+            while(n--){
+                u8arr[n] = bstr.charCodeAt(n);
+            }
+            return new File([u8arr], filename, { type: mime });
+        }
+    </script>
+</body>
+</html>
