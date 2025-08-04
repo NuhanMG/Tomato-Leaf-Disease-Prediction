@@ -1,0 +1,101 @@
+/* Set a background image with increased brightness */
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-image: url('/static/images/background.jpg');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: white;
+}
+
+/* Center the content inside the container */
+.container {
+    position: absolute;
+    top:50%;
+    right:300px;
+    transform: translateY(-50%);
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background to make the content stand out */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Position the logo at the left center */
+.logo {
+    position: absolute;
+    top: 50%;  /* Position the logo at the vertical center */
+    left: -500px;  /* Keep it on the left side */
+    transform: translateY(-50%);  /* Adjust to center the logo vertically */
+}
+
+.logo-img {
+    width: 200px; /* Set the size of your logo */
+    height: auto;
+}
+
+/* Heading styling */
+h1 {
+    color: #149d80;
+}
+
+/* Flex container for file upload and scan button */
+.file-scan-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;  /* Space between buttons */
+    margin-top: 20px;
+}
+
+/* Style for the buttons */
+.upload-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #149d80;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.upload-button:hover {
+    background-color: #54e9c9;
+    color: #000000;
+}
+
+/* Style for the file upload input */
+input[type="file"] {
+    margin: 0; /* Remove default margin */
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #149d80;
+    background-color: #149d80;
+    cursor: pointer;
+}
+
+/* Styling for the prediction result */
+#prediction-result {
+    margin-top: 20px;
+    font-size: 18px;
+    color: white;
+}
+
+/* Footer styling */
+footer {
+    position: fixed;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: white;
+    font-size: 14px;
+    line-height: 21px;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+}
