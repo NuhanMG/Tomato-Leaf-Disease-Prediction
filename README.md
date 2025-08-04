@@ -1,7 +1,7 @@
 # Tomato-Leaf-Disease-Prediction
 
-- Model Developed by Nuhan Gunasekara 
-- Application Developed by Hathik Ihthizam
+- **Model Developed by**: [Nuhan Gunasekara](https://www.linkedin.com/in/nuhangunasekara)  
+- **Web Application Developed by**: [Hathik Ihthizam](https://www.linkedin.com/in/hathikihthizam/)
 
 ## 🍅 ToMate - Deep Learning Tomato Leaf Disease Prediction Model
 
